@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สับ-ปลด คาปาซิเตอร์ 2569</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#000000;
+    --surface:#0d1319;
+    --surface-2:#141b22;
+    --surface-3:#1c252d;
+    --border:#26313b;
+    --border-soft:#19212a;
+    --text:#e7edf3;
+    --text-muted:#8ea1b2;
+    --text-dim:#5f7386;
+    --accent:#49c2b1;
+    --accent-strong:#7fe3d4;
+    --accent-bg: rgba(73,194,177,0.12);
+    --good:#4caf7d;
+    --good-bg: rgba(76,175,125,0.14);
+    --good-tint: rgba(76,175,125,0.07);
+    --warn:#e3a63d;
+    --warn-bg: rgba(227,166,61,0.14);
+    --critical:#e2685a;
+    --critical-bg: rgba(226,104,90,0.14);
+    --neutral:#8ea1b2;
+    --neutral-bg: rgba(142,161,178,0.12);
+    --shadow: 0 8px 24px rgba(0,0,0,0.35);
+    --font-display:'Chakra Petch', 'Noto Sans Thai', sans-serif;
+    --font-body:'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+  /* หน้านี้ออกแบบเป็นธีมมืดพื้นดำอย่างเดียว จึงไม่มีชุดสีสว่าง */
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  html{ background:var(--bg); color-scheme:dark; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:15px;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  ::selection{ background:var(--accent); color:#04211d; }
+  a{ color:var(--accent); }
+  button, select, input{ font-family:inherit; }
+
+  .wrap{ max-width:1360px; margin:0 auto; padding:28px 24px 80px; }
+
+  /* ---------- Header ---------- */
+  header.top{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    flex-wrap:wrap;
+    padding-bottom:18px; margin-bottom:22px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .brand-eyebrow{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); margin:0 0 8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand-eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;background:var(--good);
+    box-shadow:0 0 0 3px var(--good-bg);
+  }
+  h1{
+    font-family:var(--font-display); font-weight:600; font-size:clamp(22px,3vw,30px);
+    margin:0; letter-spacing:.01em; text-wrap:balance;
+  }
+  /* ---------- KPI row ---------- */
+  .kpis{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(172px,1fr)); gap:12px;
+    margin-bottom:28px;
+  }
+  .kpi{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:16px 18px; box-shadow:var(--shadow); cursor:pointer;
+    transition:border-color .15s ease, transform .15s ease;
+    text-align:left; color:inherit;
+  }
+  .kpi:hover{ border-color:var(--accent); transform:translateY(-1px); }
+  .kpi.active{ border-color:var(--accent); background:var(--accent-bg); }
+  .kpi .label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted);
+    margin-bottom:8px; font-family:var(--font-mono);
+  }
+  .kpi .value{
+    font-family:var(--font-display); font-size:28px; font-weight:600;
+    font-variant-numeric:tabular-nums; line-height:1;
+  }
+  .kpi .value small{ font-size:14px; font-weight:500; color:var(--text-muted); margin-left:3px;}
+  .kpi .foot{ margin-top:8px; font-size:12px; color:var(--text-dim); }
+  .kpi.c-good .value{ color:var(--good); }
+  .kpi.c-warn .value{ color:var(--warn); }
+  .kpi.c-critical .value{ color:var(--critical); }
+  .kpi .bar{ height:4px; border-radius:2px; background:var(--surface-3); margin-top:10px; overflow:hidden; }
+  .kpi .bar i{ display:block; height:100%; background:var(--good); }
+
+  /* ---------- Section shell ---------- */
+  section{ margin-bottom:32px; }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+    margin-bottom:14px; flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:var(--font-display); font-size:17px; font-weight:600; margin:0;
+    display:flex; align-items:center; gap:9px;
+  }
+  .section-head h2::before{
+    content:''; width:3px; height:15px; border-radius:2px; background:var(--accent);
+    display:inline-block;
+  }
+  .section-head .hint{ font-size:12.5px; color:var(--text-dim); }
+
+  .panel{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+
+  /* ---------- Office progress ---------- */
+  .office-list{
+    padding:8px;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:2px;
+  }
+  .office-row{
+    display:grid; grid-template-columns:1fr auto 84px; gap:12px; align-items:center;
+    padding:10px 12px; border-radius:9px; cursor:pointer;
+    border:1px solid transparent;
+  }
+  .office-row:hover{ background:var(--surface-2); border-color:var(--border); }
+  .office-row.active{ background:var(--accent-bg); border-color:var(--accent); }
+  .office-row .oname{ font-weight:500; font-size:13.5px; }
+  .office-row .ocount{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-dim); white-space:nowrap; }
+  .office-row .obar{ height:6px; border-radius:3px; background:var(--surface-3); overflow:hidden; }
+  .office-row .obar i{ display:block; height:100%; }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding:14px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .toolbar input[type="search"]{
+    flex:1 1 220px; min-width:180px;
+    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:8px; padding:9px 12px; font-size:13.5px;
+  }
+  .toolbar input[type="search"]:focus, .toolbar select:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .toolbar select{
+    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+    border-radius:8px; padding:9px 10px; font-size:13px;
+  }
+  .toolbar .count-pill{
+    margin-left:auto; font-family:var(--font-mono); font-size:12px; color:var(--text-muted);
+    background:var(--surface-2); border:1px solid var(--border); border-radius:20px; padding:6px 12px;
+    white-space:nowrap;
+  }
+  .reset-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:transparent; border:1px solid var(--border); color:var(--text-muted);
+    border-radius:8px; padding:8px 12px; font-size:12.5px; cursor:pointer;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .reset-btn:hover{ color:var(--text); border-color:var(--accent); }
+  .reset-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* ปุ่มจะเด่นขึ้นเมื่อมีตัวกรองทำงานอยู่ */
+  .reset-btn.armed{ color:var(--accent); border-color:var(--accent); background:var(--accent-bg); }
+  .reset-btn.armed:hover{ background:var(--accent); color:#04211d; }
+  .reset-btn .ico{ font-size:13px; line-height:1; }
+
+  /* ---------- Active filter bar ---------- */
+  .active-bar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:11px 14px; background:var(--surface-2);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .active-bar[hidden]{ display:none; }
+  .active-bar .af-label{
+    font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--text-dim); white-space:nowrap;
+  }
+  .af-chips{ display:flex; gap:7px; flex-wrap:wrap; }
+  .af-chip{
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--accent-bg); border:1px solid var(--accent); color:var(--accent);
+    border-radius:20px; padding:4px 6px 4px 11px; font-size:12px; cursor:pointer;
+    font-family:var(--font-body);
+  }
+  .af-chip:hover{ background:var(--accent); color:#04211d; }
+  .af-chip .x{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:15px; height:15px; border-radius:50%; background:rgba(127,227,212,0.22);
+    font-size:11px; line-height:1;
+  }
+  .af-chip:hover .x{ background:rgba(0,0,0,0.22); }
+  .active-bar .reset-btn{ margin-left:auto; }
+
+  /* ---------- Table ---------- */
+  .table-scroll{ overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; min-width:1560px; }
+  thead th{
+    position:sticky; top:0; background:var(--surface-2); z-index:2;
+    text-align:left; font-family:var(--font-mono); font-weight:500; font-size:11px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted);
+    padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; cursor:pointer;
+    user-select:none;
+  }
+  thead th:hover{ color:var(--text); }
+  thead th .arrow{ opacity:0.4; margin-left:3px; font-size:10px; }
+  thead th.sorted .arrow{ opacity:1; color:var(--accent); }
+  tbody td{
+    padding:9px 12px; border-bottom:1px solid var(--border-soft); vertical-align:middle;
+    color:var(--text);
+  }
+  /* mirrors the green highlight used in the source sheet for reported rows */
+  tbody tr.reported td{ background:var(--good-tint); }
+  tbody tr.reported td:first-child{ box-shadow:inset 3px 0 0 var(--good); }
+  tbody tr:hover td{ background:var(--surface-2); }
+  tbody tr.reported:hover td{ background:var(--good-bg); }
+  td.num, th.num{ text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+  td.mono{ font-family:var(--font-mono); font-size:12.5px; }
+  td.loc{ max-width:230px; white-space:normal; line-height:1.35; }
+  td.detail{ max-width:300px; white-space:normal; }
+  td.detail .pill{ white-space:normal; text-align:left; }
+  td.dim{ color:var(--text-dim); }
+  .pill{
+    display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:500;
+    padding:4px 9px; border-radius:20px; white-space:nowrap; font-family:var(--font-body);
+  }
+  .pill i{ width:6px; height:6px; border-radius:50%; flex:none; }
+  .pill.good{ background:var(--good-bg); color:var(--good); }
+  .pill.good i{ background:var(--good); }
+  .pill.warn{ background:var(--warn-bg); color:var(--warn); }
+  .pill.warn i{ background:var(--warn); }
+  .pill.critical{ background:var(--critical-bg); color:var(--critical); }
+  .pill.critical i{ background:var(--critical); }
+  .pill.neutral{ background:var(--neutral-bg); color:var(--neutral); }
+  .pill.neutral i{ background:var(--neutral); }
+  .maplink{ font-family:var(--font-mono); font-size:11.5px; white-space:nowrap; text-decoration:none; border-bottom:1px dotted var(--accent); }
+  .maplink:hover{ color:var(--accent-strong); }
+  .empty-row td{ text-align:center; padding:36px 12px; color:var(--text-dim); }
+  .legend{
+    display:flex; gap:16px; flex-wrap:wrap; padding:12px 14px; font-size:12px; color:var(--text-muted);
+    border-top:1px solid var(--border-soft);
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .legend .chip{ width:22px; height:12px; border-radius:3px; display:inline-block; }
+
+  footer{
+    margin-top:36px; padding-top:18px; border-top:1px solid var(--border-soft);
+    color:var(--text-dim); font-size:12px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+
+  @media (max-width:600px){
+    .wrap{ padding:18px 14px 60px; }
+    header.top{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <p class="brand-eyebrow"><span class="dot"></span>PEA · SCADA CAPACITOR REPORT · ฤดูหนาว 2569</p>
+      <h1>ข้อมูลรายงาน กำหนดเวลา สับ–ปลด สวิตช์คาปาซิเตอร์ ประจำปี 2569 (ช่วงฤดูหนาว)</h1>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpiRow" aria-label="สรุปภาพรวม"></section>
+
+  <section>
+    <div class="section-head">
+      <h2>ความคืบหน้าการดำเนินการ ราย กฟฟ. ที่รับผิดชอบ</h2>
+      <span class="hint">เรียงจาก กฟฟ. ที่ดำเนินการครบแล้วก่อน ไปหาที่ยังค้างมากสุด — คลิกเพื่อกรองตาราง</span>
+    </div>
+    <div class="panel office-list" id="officeList"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>รายการจุดติดตั้งทั้งหมด</h2>
+      <span class="hint">ค้นหา / กรอง / เรียงลำดับ ได้ทุกคอลัมน์</span>
+    </div>
+    <div class="panel">
+      <div class="toolbar">
+        <input type="search" id="searchBox" placeholder="ค้นหา: กฟฟ., ฟีดเดอร์, รหัสอุปกรณ์, สถานที่ติดตั้ง, Site ID…" aria-label="ค้นหา">
+        <select id="officeFilter" aria-label="กรองตาม กฟฟ."><option value="">ทุก กฟฟ.</option></select>
+        <select id="reportFilter" aria-label="กรองตามสถานะดำเนินการ">
+          <option value="">ทุกสถานะดำเนินการ</option>
+          <option value="yes">ดำเนินการแล้ว</option>
+          <option value="no">ยังไม่ดำเนินการ</option>
+        </select>
+        <select id="condFilter" aria-label="กรองตามสภาพอุปกรณ์">
+          <option value="">ทุกสภาพอุปกรณ์</option>
+          <option value="good">สมบูรณ์</option>
+          <option value="critical">ชำรุด / ต้องแก้ไข</option>
+          <option value="neutral">อื่น ๆ</option>
+          <option value="unknown">ยังไม่ดำเนินการ</option>
+        </select>
+        <select id="usageFilter" aria-label="กรองตามสถานะการใช้งาน"><option value="">ทุกสถานะการใช้งาน</option></select>
+        <button class="reset-btn" id="clearBtn" type="button"><span class="ico">↺</span>คืนค่าทั้งหมด</button>
+        <span class="count-pill" id="countPill">แสดง 0 / 0 จุด</span>
+      </div>
+      <div class="active-bar" id="activeBar" hidden>
+        <span class="af-label">ตัวกรองที่ใช้อยู่</span>
+        <div class="af-chips" id="afChips"></div>
+        <button class="reset-btn armed" id="resetBtn" type="button"><span class="ico">↺</span>คืนค่าทั้งหมด</button>
+      </div>
+      <div class="table-scroll">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th data-key="no" class="num">ที่<span class="arrow">↕</span></th>
+              <th data-key="office">กฟฟ.ที่รับผิดชอบ<span class="arrow">↕</span></th>
+              <th data-key="feeder">ฟีดเดอร์<span class="arrow">↕</span></th>
+              <th data-key="equipment_code">รหัสอุปกรณ์<span class="arrow">↕</span></th>
+              <th data-key="location">สถานที่ติดตั้ง<span class="arrow">↕</span></th>
+              <th data-key="size_kvar" class="num">ขนาด kVAR<span class="arrow">↕</span></th>
+              <th data-key="switch_on">เวลาสับ<span class="arrow">↕</span></th>
+              <th data-key="switch_off">เวลาปลด<span class="arrow">↕</span></th>
+              <th data-key="mw" class="num">MW<span class="arrow">↕</span></th>
+              <th data-key="mvar" class="num">Mvar<span class="arrow">↕</span></th>
+              <th data-key="control_type">ตู้ควบคุม<span class="arrow">↕</span></th>
+              <th data-key="site_id">Site ID<span class="arrow">↕</span></th>
+              <th data-key="usage_status">สถานะการใช้งาน<span class="arrow">↕</span></th>
+              <th data-key="reported">สถานะดำเนินการ<span class="arrow">↕</span></th>
+              <th data-key="condition">รายละเอียด / สภาพอุปกรณ์<span class="arrow">↕</span></th>
+              <th data-key="new_on">เวลาที่แจ้งใหม่<span class="arrow">↕</span></th>
+              <th data-key="prev_check">ตรวจสอบครั้งก่อน<span class="arrow">↕</span></th>
+              <th data-key="reporter">ผู้รายงาน<span class="arrow">↕</span></th>
+              <th data-key="report_date">รายงานเมื่อ<span class="arrow">↕</span></th>
+              <th>พิกัด</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="legend">
+        <span><i class="chip" style="background:var(--good-tint); box-shadow:inset 3px 0 0 var(--good)"></i>แถวไฮไลต์เขียว = คอลัมน์ Q ในชีตระบุว่า “ดำเนินการแล้ว”</span>
+        <span><i class="chip" style="background:transparent; border:1px solid var(--border)"></i>แถวพื้นปกติ = ยังไม่ดำเนินการ</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>ข้อมูลนี้เป็นภาพนิ่ง (snapshot) ที่ดึงจากชีต “ตารางข้อมูลฤดูหนาว” (แบบฟอร์มการตอบกลับฤดูหนาว 69) ไม่ใช่การเชื่อมต่อสดแบบเรียลไทม์</span>
+    <span>สร้างโดย Claude · เอกสารภายในสำหรับติดตามงาน</span>
+  </footer>
+
+</div>
+
+<script>
+const DATA = [{"no":1,"office":"กระนวน","feeder":"KRA07","equipment_code":"KRA07VC-102","location":"หน้าวัดป่าวิสุทธิธรรมวิโมกข์","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.35,"mvar":0.3,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.6715557,"lng":103.1533301},{"no":2,"office":"กระนวน","feeder":"KRA01","equipment_code":"KRA01VC-101","location":"ก่อนถึงที่ว่าการ อ.ซำสูง","size_kvar":"1500","switch_on":"17.30","switch_off":"20.00","mw":6.34,"mvar":1.49,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.5449692,"lng":103.0841156},{"no":3,"office":"กุดจับ","feeder":"UDC02","equipment_code":"UDC02VC-101","location":"อ.กุดจับ (หน้า อนุบาลนันทวดี)","size_kvar":"1500","switch_on":"17.15","switch_off":"21.00","mw":5.66,"mvar":1.42,"spp_vspp":"","control_type":"Time","site_id":"SCB-0001","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.421903,"lng":102.5554759},{"no":4,"office":"กุมภวาปี","feeder":"KUP01","equipment_code":"KUP01VC-101","location":"หน้าวัดเกียรต์ไพบูลย์","size_kvar":"1500","switch_on":"00.00","switch_off":"23.45","mw":6.53,"mvar":2.07,"spp_vspp":"","control_type":"Time","site_id":"SCB-0043","usage_status":"ปกติ","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.1337534,"lng":102.9460076},{"no":5,"office":"กุมภวาปี","feeder":"KUP02","equipment_code":"KUP02VC-101","location":"หน้า ร.ร.ดงเมือง อ.กุมภวาปี","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":5.02,"mvar":1.45,"spp_vspp":"","control_type":"Time","site_id":"SCB-0004","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.1108829,"lng":103.0160074},{"no":6,"office":"กุมภวาปี","feeder":"KUP05","equipment_code":"KUP05VC-101","location":"อ.หนองแสง","size_kvar":"1500","switch_on":"17.15","switch_off":"20.30","mw":3.73,"mvar":2.18,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0003","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.14951,"lng":102.7897776},{"no":7,"office":"กุมภวาปี","feeder":"KUP04","equipment_code":"KUP04VC-101","location":"ที่ว่าการ อ.โนนสะอาด","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.13,"mvar":0.55,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9795271,"lng":102.8928668},{"no":8,"office":"กุมภวาปี","feeder":"STT01","equipment_code":"STT07C-01","location":"หน้าอาคารชุมสาย อ.วังสามหมอ ทิศใต้","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":6.5,"mvar":1.79,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0005","usage_status":"ปลดชั่วคราว พาดวงจรเสริม","prev_check":"Cap. เฟส A ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9486215,"lng":103.4246509},{"no":9,"office":"กุมภวาปี","feeder":"STT07","equipment_code":"STT07C-06","location":"หน้าอำเภอ อ.วังสามหมอ ทิศเหนือ","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":-6.23,"mvar":4.02,"spp_vspp":"VSPP 8 MW","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9489947,"lng":103.4307506},{"no":10,"office":"ขอนแก่น 2","feeder":"KKE01","equipment_code":"KKA02C-04","location":"ศูนย์กระจายสินค้า TESCO LOTUS","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.69,"mvar":1.16,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ปลด ปรับปรุงระบบจำหน่าย","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.303426,"lng":102.7888176},{"no":11,"office":"ขอนแก่น 2","feeder":"NOA05","equipment_code":"KKC04C-02","location":"หน้าโลตัส บ้านทุ่ม ถ.มะลิวัลย์","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.67,"mvar":0.37,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.4499712,"lng":102.7125133},{"no":12,"office":"ชุมแพ","feeder":"CHA08","equipment_code":"CHA08VC-102","location":"บ.โคกไม้งาม ก่อน อ.สีชมพู","size_kvar":"1500","switch_on":"17.00","switch_off":"21.30","mw":6.07,"mvar":1.75,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0025","usage_status":"ปกติ","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.7369678,"lng":102.1676664},{"no":13,"office":"ชุมแพ","feeder":"CHA09","equipment_code":"CHA09VC-102","location":"ค่ายมหาศักดิพลเสพ ราบที่ 2","size_kvar":"1200","switch_on":"17.15","switch_off":"20.30","mw":4.43,"mvar":2.07,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0026","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.6202347,"lng":101.9881242},{"no":14,"office":"ชุมแพ","feeder":"CHA10","equipment_code":"CHA10C-41","location":"หน้าโรงเรียนคอนสารวิทยา","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.25,"mvar":0.79,"spp_vspp":"กฟฉ.3","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.6008501,"lng":101.9003577},{"no":15,"office":"ชุมแพ","feeder":"SBR10","equipment_code":"SBR10VC-101","location":"หน้าสวนสุขภาพ อ.สีชมพู ฝั่งทิศตะวันออก","size_kvar":"1500","switch_on":"17.00","switch_off":"21.00","mw":4.97,"mvar":1.83,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.7895805,"lng":102.1819135},{"no":16,"office":"เชียงคาน","feeder":"CKA06","equipment_code":"CKA06VC-101","location":"บ้านชมน้อย ต.เชียงกลม","size_kvar":"1200","switch_on":"17.15","switch_off":"21.15","mw":7.23,"mvar":2.94,"spp_vspp":"","control_type":"Time","site_id":"SCB-0015","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7293568,"lng":101.8999562},{"no":17,"office":"เชียงคาน","feeder":"CKA02","equipment_code":"CKA02VC-101","location":"บ้านคกไผ่ อ.ปากชม","size_kvar":"1500","switch_on":"17.30","switch_off":"20.30","mw":3.97,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"SCB-0014","usage_status":"ปกติ","prev_check":"ฟิวส์ A B ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.0416131,"lng":101.8555077},{"no":18,"office":"เซกา","feeder":"SEK01","equipment_code":"SEK01VC-101","location":"อ.บึงโขงหลง","size_kvar":"1500","switch_on":"08.30","switch_off":"16.30","mw":7.78,"mvar":1.38,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0047","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.9445833,"lng":104.0438331},{"no":19,"office":"ท่าบ่อ","feeder":"BPU09","equipment_code":"BPU09VC-101","location":"หน้า รร.บ้านนาช้างน้ำ อ.ท่าบ่อ","size_kvar":"1500","switch_on":"17.30","switch_off":"21.45","mw":4.57,"mvar":1.45,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0013","usage_status":"ปกติ","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.8201234,"lng":102.5652474},{"no":20,"office":"ธาตุพนม","feeder":"THA02","equipment_code":"THA02VC-101","location":"บ้านหนองย่างชิ้น","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":6.69,"mvar":1.47,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0413067,"lng":104.6958344},{"no":21,"office":"ธาตุพนม","feeder":"THA05","equipment_code":"THA05VC-101","location":"บ้านหลักศิลา","size_kvar":"900","switch_on":"17.15","switch_off":"21.45","mw":7.56,"mvar":2.79,"spp_vspp":"","control_type":"Time","site_id":"SCB-0052","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0028975,"lng":104.7232525},{"no":22,"office":"นครพนม","feeder":"NNA04","equipment_code":"NNA04VC-101","location":"เยื้อง วัดฉลาดธรรมาราม ต.กุรุคุ","size_kvar":"1500","switch_on":"17.15","switch_off":"21.15","mw":5.39,"mvar":2.74,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0050","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3341369,"lng":104.5841188},{"no":23,"office":"นครพนม","feeder":"NNA07","equipment_code":"NNA07VC-101","location":"ปากทางแยก มหาชัย อ.ปลาปาก","size_kvar":"1500","switch_on":"17.15","switch_off":"21.30","mw":4.12,"mvar":1.84,"spp_vspp":"","control_type":"Time","site_id":"SCB-0051","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.2935155,"lng":104.4679716},{"no":24,"office":"นครพนม","feeder":"NNA02","equipment_code":"NNA02VC-101","location":"อ.ปลาปาก","size_kvar":"900","switch_on":"17.45","switch_off":"21.15","mw":5.92,"mvar":1.53,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.1750199,"lng":104.5257639},{"no":25,"office":"นครพนม","feeder":"NNA08","equipment_code":"NNA08VC-101","location":"หน้า รพ. อ.ท่าอุเทน","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":3.77,"mvar":1.59,"spp_vspp":"","control_type":"Time","site_id":"SCB-0048","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5548444,"lng":104.6119739},{"no":26,"office":"นครพนม","feeder":"SSK04","equipment_code":"SSK04VC-101","location":"อ.นาหว้า","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.14,"mvar":0.98,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.4887242,"lng":104.0995588},{"no":27,"office":"นครพนม","feeder":"BFA01","equipment_code":"BFA01VC-101","location":"บ้านท่าดอกแก้ว อ.ท่าอุเทน","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":6.19,"mvar":0.77,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7563094,"lng":104.2863528},{"no":28,"office":"นากลาง","feeder":"NBL04","equipment_code":"NBL04VC-101","location":"บ้านหนองบัวคำแสน อ.นากลาง(ทิศเหนือ)","size_kvar":"1500","switch_on":"17.15","switch_off":"21.30","mw":6.77,"mvar":2.6,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0021","usage_status":"ปกติ","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3069336,"lng":102.1859192},{"no":29,"office":"นากลาง","feeder":"NBL09","equipment_code":"NBL09VC-101","location":"บ้านหนองบัวคำแสน อ.นากลาง (ทิศใต้)","size_kvar":"1500","switch_on":"8.30","switch_off":"21.00","mw":6.61,"mvar":3.23,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0022","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3076774,"lng":102.1831925},{"no":30,"office":"นาแก","feeder":"THA04","equipment_code":"THA04VC-101","location":"หน้าสาธารณสุข อ.นาแก","size_kvar":"1500","switch_on":"17.15","switch_off":"21.15","mw":4.97,"mvar":1.75,"spp_vspp":"","control_type":"Time","site_id":"SCB-0054","usage_status":"ปกติ","prev_check":"ตู้ยังไม่ได้ Setting","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9462316,"lng":104.5027182},{"no":31,"office":"น้ำพอง","feeder":"NQA07","equipment_code":"NQA07C-02","location":"สามแยกบ้านคำบง ถ.มิตรภาพ","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":7.67,"mvar":2.24,"spp_vspp":"VSPP Solar 5.88MW","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"ตู้สั่งการไม่ได้","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.7888161,"lng":102.8266843},{"no":32,"office":"น้ำพอง","feeder":"NQA07","equipment_code":"NQA07C-04","location":"หน้าเทศบาลตำบลนาคำ อ.อุบลรัตน์","size_kvar":"900","switch_on":"00.15","switch_off":"24.00","mw":7.67,"mvar":2.24,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"ยังไม่นำเข้าใช้งาน","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.8508872,"lng":102.6782288},{"no":33,"office":"น้ำพอง","feeder":"NQA04","equipment_code":"NQA04C-01","location":"สามแยกตลาดอุบลรัตน์ - โนนสัง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.65,"mvar":0.49,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.7659036,"lng":102.6326157},{"no":34,"office":"บ้านดุง","feeder":"BDH01","equipment_code":"BDH01VC-101","location":"หน้าโรงเรียนชัยนาคำวิทยา","size_kvar":"1500","switch_on":"17.30","switch_off":"20.30","mw":5.29,"mvar":0.85,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.6707641,"lng":103.1699679},{"no":35,"office":"บ้านดุง","feeder":"BDH02","equipment_code":"BDH02VC-101","location":"ตรงข้ามวัดมงคลชัยศรี บ.สันติสุข","size_kvar":"1500","switch_on":"17.00","switch_off":"21.00","mw":5.32,"mvar":1.56,"spp_vspp":"","control_type":"Time","site_id":"SCB-0039","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7476898,"lng":103.2660203},{"no":36,"office":"บ้านดุง","feeder":"BDH03","equipment_code":"BDH03VC-101","location":"บ้านหัวฝาย ทิศตะวันออก","size_kvar":"1500","switch_on":"17.15","switch_off":"21.15","mw":8.92,"mvar":1.38,"spp_vspp":"","control_type":"Time","site_id":"SCB-0040","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7719419,"lng":103.2856652},{"no":37,"office":"บ้านดุง","feeder":"BDH04","equipment_code":"BDH04VC-101","location":"บ้านบึงโน","size_kvar":"1500","switch_on":"17.45","switch_off":"20.45","mw":5.14,"mvar":1.49,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5891185,"lng":103.419622},{"no":38,"office":"บ้านผือ","feeder":"BPU05","equipment_code":"BPU05C-01","location":"สามแยกวัดป่าถ้ำตูม(ทิศใต้)","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":5.76,"mvar":1.52,"spp_vspp":"","control_type":"Time","site_id":"SCB-0011","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.8073296,"lng":102.3290114},{"no":39,"office":"บ้านผือ","feeder":"BPU07","equipment_code":"BPU07C-01","location":"สามแยกวัดป่าถ้ำตูม(ทิศเหนือ)","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":6.55,"mvar":1.45,"spp_vspp":"","control_type":"Time","site_id":"SCB-0010","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.8074476,"lng":102.3294818},{"no":40,"office":"บ้านผือ","feeder":"SCM03","equipment_code":"SCM03C-03","location":"ที่พักสงฆ์วัดดอยบ้านปากราง","size_kvar":"1500","switch_on":"17.15","switch_off":"21.00","mw":6.73,"mvar":1.32,"spp_vspp":"","control_type":"Time","site_id":"SCB-0012","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.9257602,"lng":102.2348944},{"no":41,"office":"บ้านไผ่","feeder":"BCA03","equipment_code":"BCA03C-01","location":"หน้าโรงงานยาสูบ อ.ชนบท","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":7.95,"mvar":1.74,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.0837039,"lng":102.6398087},{"no":42,"office":"บ้านไผ่","feeder":"KKE07","equipment_code":"BCA09C-01","location":"แยกบ้านดง อ.บ้านแฮด","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.97,"mvar":0.96,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.1645591,"lng":102.7541787},{"no":43,"office":"บ้านไผ่","feeder":"BCA02","equipment_code":"BCA02C-01","location":"แยกบ้านหินตั้ง อ.บ้านไผ่","size_kvar":"1500","switch_on":"17.30","switch_off":"23.00","mw":6.88,"mvar":1.35,"spp_vspp":"","control_type":"Time","site_id":"SCB-0032","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.0443515,"lng":102.8258579},{"no":44,"office":"บ้านฝาง","feeder":"KKD08","equipment_code":"KKD08VC-101","location":"หน้าเทศบาล อ.พระยืน","size_kvar":"1500","switch_on":"17.30","switch_off":"22.00","mw":5.86,"mvar":1.29,"spp_vspp":"","control_type":"Time","site_id":"SCB-0027","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.3366721,"lng":102.6609548},{"no":45,"office":"บ้านฝาง","feeder":"NOA04","equipment_code":"NOA04VC-101","location":"หน้า รง. เอส ซี เจริญโภคภัณฑ์","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":5.64,"mvar":1.44,"spp_vspp":"","control_type":"Time","site_id":"SCB-0028","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.4744893,"lng":102.5973384},{"no":46,"office":"บ้านฝาง","feeder":"NOA05","equipment_code":"NOA05VC-101","location":"ยู เทิน บ้านดอนดู่","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.67,"mvar":0.37,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.4821269,"lng":102.5747991},{"no":47,"office":"บ้านแพง","feeder":"BFA01","equipment_code":"BFA01VC-101","location":"บ้านนาพระชัย","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.17,"mvar":0.28,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7563094,"lng":104.2863528},{"no":48,"office":"บึงกาฬ","feeder":"BUB05","equipment_code":"BUB05VC-101","location":"ตรงข้าม ร.ร.ปากคาดพิทยาคม","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.39,"mvar":0.65,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.3178899,"lng":103.3160511},{"no":49,"office":"บึงกาฬ","feeder":"BUB09","equipment_code":"BUB09VC-101","location":"หน้า รร.ห้วยไม้ซอด อ.ปากคาด","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.16,"mvar":1.51,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.3196281,"lng":103.3173364},{"no":50,"office":"บึงกาฬ","feeder":"XIA03","equipment_code":"XIA03VC-101","location":"อ.โซ่พิสัย","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.31,"mvar":0.54,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.0776854,"lng":103.4564836},{"no":51,"office":"บึงกาฬ","feeder":"BUA02","equipment_code":"BUA02C-02","location":"หน้าหมวดการทางศรีวิไล","size_kvar":"1200","switch_on":"ปลด","switch_off":"ปลด","mw":2.54,"mvar":0.84,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.1861252,"lng":103.7417465},{"no":52,"office":"บึงกาฬ","feeder":"BUB05","equipment_code":"BUA04C-02","location":"หน้า รร.ไคสี ปากคาด - บึงกาฬ","size_kvar":"900","switch_on":"ปลด","switch_off":"ปลด","mw":4.39,"mvar":0.65,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.4196112,"lng":103.48857},{"no":53,"office":"บึงกาฬ","feeder":"BUA05","equipment_code":"BUA05VC-101","location":"บ้านกำแพงเพชร","size_kvar":"1500","switch_on":"0.00","switch_off":"23.45","mw":4.45,"mvar":1.74,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"คาดว่าชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.2364706,"lng":103.7089603},{"no":54,"office":"บึงกาฬ","feeder":"XIA04","equipment_code":"XIA04VC-101","location":"บ้านดอนหญ้านาง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.94,"mvar":0.65,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.0609696,"lng":103.6148877},{"no":55,"office":"บึงกาฬ","feeder":"BUA03","equipment_code":"BUA03VC-101","location":"ตรงข้ามเทศบาลตำบลโคกก่อง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.32,"mvar":0.45,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.3110873,"lng":103.7985013},{"no":56,"office":"บึงกาฬ","feeder":"BUB09","equipment_code":"PON10C-04","location":"หน้าวัดสันติราชโพนงาม บ.นาดง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.09,"mvar":0.18,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.2699716,"lng":103.3011498},{"no":57,"office":"บึงกาฬ","feeder":"BUA03","equipment_code":"BUA03VC-102","location":"โรงพยาบาลส่งเสริมสุขภาพตำบลชัยพร","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.32,"mvar":0.45,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.2791151,"lng":103.8663502},{"no":58,"office":"พล","feeder":"POA08","equipment_code":"POA08VC-101","location":"บ้านโคกสี อ.พล","size_kvar":"1200","switch_on":"ปลด","switch_off":"ปลด","mw":4.7,"mvar":0.73,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":15.8566556,"lng":102.5573361},{"no":59,"office":"พล","feeder":"POA04","equipment_code":"POA04VC-101","location":"หน้าสถานีตำรวจภูธร อ.แวงน้อย","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.07,"mvar":0.35,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":15.8049479,"lng":102.414908},{"no":60,"office":"พังโคน","feeder":"PFA09","equipment_code":"PFA09C-02","location":"โรงพยาบาลส่งเสริมสุขภาพบ้านคำบิด","size_kvar":"1500","switch_on":"17.15","switch_off":"21.15","mw":5.22,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.2711479,"lng":103.5631297},{"no":61,"office":"พังโคน","feeder":"PFA10","equipment_code":"PFA010C-02","location":"บ้านคำบิด อ.วาริชภูมิ (ทิศเหนือ)","size_kvar":"1500","switch_on":"17.30","switch_off":"21.45","mw":5.65,"mvar":1.53,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.268184,"lng":103.5696101},{"no":62,"office":"เพ็ญ","feeder":"UDA04","equipment_code":"UDA09C-04","location":"บ้านโนนสะอาด (กว่างเขิ่น)","size_kvar":"900","switch_on":"00.30","switch_off":"00.15","mw":8.21,"mvar":2.35,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5848856,"lng":102.9238968},{"no":63,"office":"เพ็ญ","feeder":"NKA08","equipment_code":"NKA08VC-101","location":"บ้านสีงชา ก่อนเข้า อ.เพ็ญ","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":6.31,"mvar":1.73,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.6971544,"lng":102.8963147},{"no":64,"office":"เพ็ญ","feeder":"PON06","equipment_code":"PON06VC-101","location":"หน้าไปรษณีย์ อ.สร้างคอม","size_kvar":"1500","switch_on":"17.30","switch_off":"20.30","mw":3.76,"mvar":1.55,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.8237991,"lng":103.0868544},{"no":65,"office":"โพนพิสัย","feeder":"XIA01","equipment_code":"XIA01VC-101","location":"บ้านภูเงิน อ.เฝ้าไร่","size_kvar":"1500","switch_on":"17.15","switch_off":"20.30","mw":3.65,"mvar":1.13,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":18.0171181,"lng":103.2959763},{"no":66,"office":"ภูเวียง","feeder":"NOA03","equipment_code":"NOA03VC-101","location":"แยกไป อ.หนองนาคำ อ.ภูเวียง","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":4.1,"mvar":1.25,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.6663225,"lng":102.3705969},{"no":67,"office":"ภูเวียง","feeder":"NOA06","equipment_code":"NOA06VC-101","location":"หน้าร้านไดโนเสาร์ อ.ภูเวียง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.12,"mvar":0.89,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.6429645,"lng":102.3840149},{"no":68,"office":"มัญจาคีรี","feeder":"BCA03","equipment_code":"BCA03C-02","location":"บ้านหนองม่วง","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":6.85,"mvar":1.74,"spp_vspp":"","control_type":"Time","site_id":"SCB-0033","usage_status":"ปกติ","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.1049006,"lng":102.5403413},{"no":69,"office":"มัญจาคีรี","feeder":"KKR01","equipment_code":"KKR01C-02","location":"บ้านสามหมอโนนทัน โคกโพธิ์ชัย","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":4.31,"mvar":1.01,"spp_vspp":"","control_type":"Time","site_id":"SCB-0034","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.0056003,"lng":102.3744194},{"no":70,"office":"เลย","feeder":"LEA03","equipment_code":"LEA03VC-101","location":"ศูนย์ฝึกฝีมือแรงงาน","size_kvar":"1500","switch_on":"18.30","switch_off":"22.00","mw":4.95,"mvar":1.32,"spp_vspp":"","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5171259,"lng":101.8371353},{"no":71,"office":"เลย","feeder":"LEU02","equipment_code":"LEU02VC-101","location":"บัานไร่ทาม","size_kvar":"1500","switch_on":"17.45","switch_off":"21.00","mw":7.29,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"คาดว่าชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.4700952,"lng":101.7860299},{"no":72,"office":"เลย","feeder":"LEU02","equipment_code":"LEU02VC-102","location":"หน้า บริษัทศรีตรังฯ","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":7.44,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"SCB-0016","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"มีแผนงานรื้อถอนย้ายจุดติดตั้ง","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5105895,"lng":101.8942349},{"no":73,"office":"เลย","feeder":"TLI04","equipment_code":"TLI04VC-101","location":"หน้าวัดป่าเลไลย์ อ.ท่าลี่","size_kvar":"1200","switch_on":"ปลด","switch_off":"ปลด","mw":1.33,"mvar":-0.06,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อบำรุงรักษาสถานี","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.6197993,"lng":101.4140667},{"no":74,"office":"วังสะพุง","feeder":"WUA04","equipment_code":"WUA04VC-101","location":"ปากทางแยก ภูกระดึง","size_kvar":"1500","switch_on":"18.15","switch_off":"21.00","mw":6.03,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"SCB-0017","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.888688,"lng":101.9135271},{"no":75,"office":"วังสะพุง","feeder":"WUA06","equipment_code":"WUA06VC-101","location":"หน้า ร.ร.บ้านเอราวัณ (ฝั่งทิศใต้)","size_kvar":"1500","switch_on":"08.00","switch_off":"20.00","mw":7.25,"mvar":2.65,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0018","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3053827,"lng":101.9508031},{"no":76,"office":"วังสะพุง","feeder":"WUA01","equipment_code":"WUA01VC-101","location":"บ้านนาดอกไม้ กม.107","size_kvar":"1500","switch_on":"18.30","switch_off":"21.45","mw":2.21,"mvar":2.53,"spp_vspp":"VSPP Solar","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3011367,"lng":101.8796592},{"no":77,"office":"วังสะพุง","feeder":"WUA07","equipment_code":"WUA07C-02","location":"สามแยก รพ.ภูหลวง","size_kvar":"1500","switch_on":"18.30","switch_off":"21.30","mw":5.7,"mvar":1.25,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"คาดว่าชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.1344148,"lng":101.6706406},{"no":78,"office":"วังสะพุง","feeder":"LEA10","equipment_code":"LEA10VC-101","location":"บ.พรประเสริฐ","size_kvar":"1500","switch_on":"08.00","switch_off":"21.30","mw":6.55,"mvar":2.11,"spp_vspp":"","control_type":"Time","site_id":"SCB-0019","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3673933,"lng":101.8786549},{"no":79,"office":"วังสะพุง","feeder":"LEA09","equipment_code":"LEA09VC-101","location":"บ้านบุ่งตะข่าย","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":4.12,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"SCB-0020","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3853745,"lng":101.7697429},{"no":80,"office":"วังสะพุง","feeder":"WUA10","equipment_code":"WUA010VC-101","location":"อ.หนองหิน","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.35,"mvar":0.88,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.1024262,"lng":101.8647775},{"no":81,"office":"วานรนิวาส","feeder":"SEK06","equipment_code":"SEK06VC-101","location":"เทศบาล ต.บ้านม่วง","size_kvar":"1500","switch_on":"17.45","switch_off":"20.30","mw":8.67,"mvar":1.66,"spp_vspp":"","control_type":"Time","site_id":"SCB-0041","usage_status":"ปกติ","prev_check":"ตู้ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.8507063,"lng":103.5629684},{"no":82,"office":"วานรนิวาส","feeder":"WWA09","equipment_code":"WWA09VC-101","location":"บ.หนองแวง อ. วานรฯ","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":5.19,"mvar":1.35,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0046","usage_status":"ปกติ","prev_check":"คาดว่าชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.7381358,"lng":103.7057396},{"no":83,"office":"วานรนิวาส","feeder":"WWA10","equipment_code":"WWA10VC-103","location":"ก่อนแบ่งแดน วานรฯ-เจริญศิลป์","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.98,"mvar":1.1,"spp_vspp":"","control_type":"Time","site_id":"SCB-0030","usage_status":"ใช้งานเมื่อแรงดันปลายสายตก","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.6271482,"lng":103.5964803},{"no":84,"office":"ศรีบุญเรือง","feeder":"SBR07","equipment_code":"SBR07VC-101","location":"บ.ศรีบุญเรือง อ.ศรีบุญเรือง","size_kvar":"1500","switch_on":"17.15","switch_off":"21.45","mw":5.71,"mvar":1.35,"spp_vspp":"","control_type":"Time","site_id":"SCB-0023","usage_status":"ปกติ","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9803075,"lng":102.2923519},{"no":85,"office":"ศรีบุญเรือง","feeder":"SBR08","equipment_code":"SBR08VC-102","location":"บ.หนองเหมือดแอ อ.โนนสัง","size_kvar":"1500","switch_on":"17.30","switch_off":"21.00","mw":5.17,"mvar":1.11,"spp_vspp":"","control_type":"Time","site_id":"SCB-0024","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.8524051,"lng":102.5105304},{"no":86,"office":"สกลนคร","feeder":"SOB01","equipment_code":"SOB01VC-101","location":"แยก อ.โพนนาแก้ว ทิศใต้","size_kvar":"1500","switch_on":"17.45","switch_off":"21.30","mw":2.32,"mvar":1.18,"spp_vspp":"","control_type":"Time","site_id":"SCB-0057","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.2692211,"lng":104.2182208},{"no":87,"office":"สกลนคร","feeder":"SOB07","equipment_code":"SOB07VC-101","location":"เลยแยกเข้า อ.โพนนาแก้ว ทิศเหนือ","size_kvar":"1500","switch_on":"17.45","switch_off":"21.30","mw":5.67,"mvar":2.04,"spp_vspp":"","control_type":"Time","site_id":"SCB-0058","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.2632123,"lng":104.2109317},{"no":88,"office":"สกลนคร","feeder":"SOB07","equipment_code":"SOB07C-03","location":"หลังแยกเข้า รง.ศรีตรัง ไป อ.นาหว้า","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.67,"mvar":2.04,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3104195,"lng":104.2034813},{"no":89,"office":"สกลนคร","feeder":"SOA07","equipment_code":"SOA07VC-101","location":"อ.โคกศรีสุพรรณ ทิศเหนือ","size_kvar":"1500","switch_on":"17.00","switch_off":"21.30","mw":6.38,"mvar":1.16,"spp_vspp":"","control_type":"Time","site_id":"SCB-0055","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0501891,"lng":104.272751},{"no":90,"office":"สกลนคร","feeder":"SOA08","equipment_code":"SOA08VC-101","location":"อ.โคกศรีสุพรรณ ทิศใต้","size_kvar":"1500","switch_on":"17.15","switch_off":"21.45","mw":8.08,"mvar":1.48,"spp_vspp":"","control_type":"Time","site_id":"SCB-0056","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0378056,"lng":104.2891161},{"no":91,"office":"สกลนคร","feeder":"NPA01","equipment_code":"NPA01VC-101","location":"สี่แยกบ้านคำเพิ่ม (ใกล้ สฟฟ.น้ำพุง)","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.64,"mvar":1.56,"spp_vspp":"","control_type":"Time","site_id":"SCB-0059","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.9992263,"lng":103.9610698},{"no":92,"office":"สกลนคร","feeder":"NPA01","equipment_code":"NPA01VC-102","location":"หน้าโรงเรียนกุดบากพัฒนาศึกษา","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.14,"mvar":-2.02,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0828449,"lng":103.8173007},{"no":93,"office":"สกลนคร","feeder":"SOB09","equipment_code":"SOB09VC-101","location":"หน้า ร.ร.บ้านบัวราษฏร์บำรุง","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":7.31,"mvar":1.63,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3998786,"lng":103.9854814},{"no":94,"office":"สว่างแดนดิน","feeder":"WDA05","equipment_code":"NHA07VC-101","location":"เยื้อง ปตท. ต.บงใต้","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":7.78,"mvar":0.54,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด และหมดความจำเป็น","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3998159,"lng":103.3568675},{"no":95,"office":"สว่างแดนดิน","feeder":"WDA02","equipment_code":"WDA02VC-101","location":"สามแยก ร.พ. อ.สว่างแดนดิน","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":7.53,"mvar":1.19,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.4747559,"lng":103.4619972},{"no":96,"office":"สว่างแดนดิน","feeder":"WDA01","equipment_code":"PFA07C-02","location":"สี่แยกบ้านดอนเขือง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":4.57,"mvar":0.52,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.420633,"lng":103.6106529},{"no":97,"office":"สว่างแดนดิน","feeder":"WDA07","equipment_code":"PFA08C-02","location":"หน้าวัดใหม่ อ.เจริญศิลป์","size_kvar":"1500","switch_on":"17.00","switch_off":"21.30","mw":5.48,"mvar":0.61,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0029","usage_status":"ปกติ","prev_check":"ไม่สมบูรณ์ (เข้าไม่ครบเซลล์)","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5891007,"lng":103.5537552},{"no":98,"office":"หนองบัวลำภู","feeder":"BPU04","equipment_code":"BPU04C-02","location":"อ.สุวรรณคูหา (บ.หนองกุงน้อย)","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":3.73,"mvar":1.45,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"SCB-0031","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5667209,"lng":102.2883621},{"no":99,"office":"หนองบัวลำภู","feeder":"NBU02","equipment_code":"NBU02VC-101","location":"บ้านวังน้ำขาว","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.22,"mvar":1.86,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.142994,"lng":102.4470357},{"no":100,"office":"หนองบัวลำภู","feeder":"NBU02","equipment_code":"NBU02VC-102","location":"บ.โนนสูง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.22,"mvar":1.86,"spp_vspp":"VSPP Solar","control_type":"var Control","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.0143314,"lng":102.5372259},{"no":101,"office":"หนองบัวลำภู","feeder":"NBU02","equipment_code":"NBU02VC-103","location":"หน้า รพ.โนนสัง","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.54,"mvar":-0.11,"spp_vspp":"VSPP Solar","control_type":"var Control","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.8708512,"lng":102.5543849},{"no":102,"office":"หนองบัวลำภู","feeder":"NBL05","equipment_code":"NBL05VC-102","location":"บ้านหินนกยูง อ.สุวรรณคูหา","size_kvar":"1500","switch_on":"09.00","switch_off":"23.00","mw":5.81,"mvar":2.52,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0002","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5497785,"lng":102.319386},{"no":103,"office":"หนองเรือ","feeder":"NOA07","equipment_code":"NOA07VC-101","location":"หน้า ร.ร.บ้านหนองโนประชาสรรค์","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":-3.68,"mvar":2.37,"spp_vspp":"VSPP 8 MW","control_type":"var Control","site_id":"","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":16.4423382,"lng":102.4402984},{"no":104,"office":"หนองวัวซอ","feeder":"UDC05","equipment_code":"UDC05VC-101","location":"หน้าประปา อ.หนองวัวซอ","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.83,"mvar":0.87,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.2789759,"lng":102.6079639},{"no":105,"office":"หนองสองห้อง","feeder":"POA01","equipment_code":"POA01VC-101","location":"บ้านหนองเม็ก(ทิศใต้)","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":7.25,"mvar":1.35,"spp_vspp":"","control_type":"Time","site_id":"SCB-0037","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":15.7736374,"lng":102.7179051},{"no":106,"office":"หนองสองห้อง","feeder":"POA06","equipment_code":"POA06VC-101","location":"บ้านหนองเม็ก(ทิศเหนือ)","size_kvar":"1500","switch_on":"00.15","switch_off":"00.00","mw":-0.61,"mvar":2.72,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":15.7732765,"lng":102.7185682},{"no":107,"office":"หนองหาน","feeder":"NHA05","equipment_code":"NHA05VC-101","location":"บ้านหนองบ่อ","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.75,"mvar":0.56,"spp_vspp":"","control_type":"Time","site_id":"SCB-0006","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ไม่มีตู้ Control","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.363841,"lng":103.0641339},{"no":108,"office":"หนองหาน","feeder":"NHA06","equipment_code":"NHA06VC-101","location":"บ้านไชยวาน","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.41,"mvar":0.26,"spp_vspp":"VSPP 8 MW","control_type":"Time","site_id":"SCB-0007","usage_status":"รอนำเข้าเมื่อ รง.น้ำตาลขนาน","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3082707,"lng":103.2411901},{"no":109,"office":"หนองหาน","feeder":"NHA09","equipment_code":"NHA09VC-101","location":"บ้านหนองสะหนาย","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":2.48,"mvar":0.43,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"สภาพสมบูรณ์","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.3266826,"lng":103.1105945},{"no":110,"office":"อากาศอำนวย","feeder":"SEK03","equipment_code":"SEK03VC-101","location":"บ้านนาดอกไม้","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":5.91,"mvar":0.58,"spp_vspp":"","control_type":"Time","site_id":"SCB-0045","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"ตู้ชำรุด","op_status":"ดำเนินการแล้ว","condition":"\"ปลด\" ใช้งานได้ปกติ สภาพสมบูรณ์ (ใช้ยกระดับแรงดันเมื่อมีการถ่ายเทโหลดเท่านั้น)","report_date":"20/10/2569","reported":true,"reporter":"นายชัชวาลย์ แสนคำ","reporter_pos":"พชง.5","reporter_dept":"ผปร.","new_on":"","new_off":"","inspect":"","lat":17.6731949,"lng":103.9425634},{"no":111,"office":"อากาศอำนวย","feeder":"WWA06","equipment_code":"WWA06VC-102","location":"อ.อากาศอำนวย (ทิศตะวันออก)","size_kvar":"1500","switch_on":"17.30","switch_off":"21.30","mw":5.39,"mvar":1.28,"spp_vspp":"","control_type":"Time","site_id":"SCB-0044","usage_status":"ปกติ","prev_check":"สภาพสมบูรณ์","op_status":"ดำเนินการแล้ว","condition":"ใช้งานได้ปกติ ปัจจุบันนำเข้าใช้งานอยู่","report_date":"20/10/2569","reported":true,"reporter":"นายชัชวาลย์ แสนคำ","reporter_pos":"พชง.5","reporter_dept":"ผปร.","new_on":"17.30","new_off":"21.30","inspect":"สภาพอุปกรณ์สมบูรณ์ 100%","lat":17.5689073,"lng":103.9723724},{"no":112,"office":"อากาศอำนวย","feeder":"WWA07","equipment_code":"WWA07VC-102","location":"หน้าโรงเรียนบ้านเซือม","size_kvar":"900","switch_on":"ปลด","switch_off":"ปลด","mw":2.42,"mvar":0.25,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ใช้งานเมื่อถ่ายเทโหลด","prev_check":"สภาพสมบูรณ์","op_status":"ดำเนินการแล้ว","condition":"\"ปลด\" ใช้งานได้ปกติ แต่หมดความจำเป็นใช้งานแล้ว","report_date":"20/10/2569","reported":true,"reporter":"นายชัชวาลย์ แสนคำ","reporter_pos":"พชง.5","reporter_dept":"ผปร.","new_on":"","new_off":"","inspect":"","lat":17.5643784,"lng":103.9707508},{"no":113,"office":"อุดรธานี","feeder":"UDA04","equipment_code":"UDA04C-03","location":"บ้านนาข่า (ฝั่งทิศตะวันตก)","size_kvar":"1500","switch_on":"00.00","switch_off":"23.45","mw":6.35,"mvar":2.76,"spp_vspp":"VSPP Solar","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"ปลด ปรับปรุงระบบจำหน่าย","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.5408547,"lng":102.800202},{"no":114,"office":"อุดรธานี","feeder":"UDC10","equipment_code":"UDC10VC-101","location":"บ้านโนนสวรรค์(ก่อนซูมิรับเบอร์)","size_kvar":"1500","switch_on":"00.00","switch_off":"23.45","mw":5.37,"mvar":2.45,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"ปกติ","prev_check":"-","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.4102483,"lng":102.6488584},{"no":115,"office":"อุดรธานี 2","feeder":"UDE02","equipment_code":"UDA03C-01","location":"บ้านหนองลีหู","size_kvar":"1500","switch_on":"ปลด","switch_off":"ปลด","mw":3.72,"mvar":0.62,"spp_vspp":"","control_type":"Time","site_id":"","usage_status":"หมดความจำเป็นใช้งาน","prev_check":"ชำรุด","op_status":"","condition":"","report_date":"","reported":false,"reporter":"","reporter_pos":"","reporter_dept":"","new_on":"","new_off":"","inspect":"","lat":17.4412227,"lng":102.8530587}];
+
+/* สภาพอุปกรณ์: จัดกลุ่มจากข้อความในคอลัมน์ "รายละเอียดสภาพอุปกรณ์"
+   คอลัมน์ R ของชีต ซึ่งมีค่าเฉพาะจุดที่ดำเนินการแล้ว */
+function conditionClass(d){
+  const c = d.condition || '';
+  if(!d.reported || !c) return 'unknown';
+  if(c.includes('ชำรุด') || c.includes('ไม่สมบูรณ์') || c.includes('ไม่มีตู้')) return 'critical';
+  if(c.includes('สมบูรณ์') || c.includes('ปกติ')) return 'good';
+  return 'neutral';
+}
+const CONDLABEL = {good:'สมบูรณ์', critical:'ชำรุด', neutral:'อื่น ๆ', unknown:'ยังไม่ดำเนินการ'};
+DATA.forEach(d=>{ d._cclass = conditionClass(d); });
+
+/* ---------- KPIs ---------- */
+const total = DATA.length;
+const reported = DATA.filter(d=>d.reported).length;
+const pending = total - reported;
+const broken = DATA.filter(d=>d._cclass==='critical').length;
+const sumMW = DATA.reduce((a,d)=>a+(d.mw||0),0);
+const sumMvar = DATA.reduce((a,d)=>a+(d.mvar||0),0);
+const pct = total? Math.round(reported/total*100) : 0;
+const officeCount = new Set(DATA.map(d=>d.office)).size;
+
+const kpiRow = document.getElementById('kpiRow');
+const kpiDefs = [
+  {id:'all', label:'จุดติดตั้งทั้งหมด', value: total, foot: officeCount + ' กฟฟ.ที่รับผิดชอบ', cls:''},
+  {id:'reported', label:'ดำเนินการแล้ว', value: reported, foot: pct+'% ของทั้งหมด', cls:'c-good', bar:pct},
+  {id:'pending', label:'ยังไม่ดำเนินการ', value: pending, foot: (100-pct)+'% ของทั้งหมด', cls:'c-warn'},
+  {id:'broken', label:'พบอุปกรณ์ชำรุด', value: broken, foot: 'จาก '+reported+' จุดที่ดำเนินการแล้ว', cls:'c-critical'},
+  {id:'capacity', label:'กำลังไฟฟ้ารวม', value: sumMW.toFixed(1), foot: 'Mvar รวม '+sumMvar.toFixed(1), cls:'', suffix:' MW'},
+];
+kpiRow.innerHTML = kpiDefs.map(k=>`
+  <button class="kpi ${k.cls}" data-filter="${k.id}" type="button">
+    <div class="label">${k.label}</div>
+    <div class="value">${k.value}${k.suffix?`<small>${k.suffix}</small>`:''}</div>
+    <div class="foot">${k.foot}</div>
+    ${k.bar!==undefined?`<div class="bar"><i style="width:${k.bar}%"></i></div>`:''}
+  </button>
+`).join('');
+
+/* ---------- Office breakdown ---------- */
+const officeMap = {};
+DATA.forEach(d=>{
+  if(!officeMap[d.office]) officeMap[d.office] = {office:d.office, total:0, sent:0};
+  officeMap[d.office].total++;
+  if(d.reported) officeMap[d.office].sent++;
+});
+const officeStats = Object.values(officeMap).map(o=>({...o, pct: o.total? Math.round(o.sent/o.total*100):0}));
+/* เรียงจาก กฟฟ. ที่รายงานครบมากที่สุด ไปหาน้อยที่สุด */
+officeStats.sort((a,b)=> b.pct-a.pct || b.sent-a.sent || b.total-a.total || a.office.localeCompare(b.office,'th'));
+
+const officeListEl = document.getElementById('officeList');
+function renderOfficeList(activeOffice){
+  officeListEl.innerHTML = officeStats.map(o=>{
+    const barColor = o.pct>=100? 'var(--good)' : o.pct>0? 'var(--warn)' : 'var(--critical)';
+    return `<div class="office-row ${activeOffice===o.office?'active':''}" data-office="${o.office}">
+      <span class="oname">${o.office}</span>
+      <span class="ocount">${o.sent}/${o.total}</span>
+      <span class="obar"><i style="width:${o.pct}%;background:${barColor}"></i></span>
+    </div>`;
+  }).join('');
+}
+renderOfficeList(null);
+
+/* ---------- Filter selects ---------- */
+const officeFilterEl = document.getElementById('officeFilter');
+[...new Set(DATA.map(d=>d.office))].sort((a,b)=>a.localeCompare(b,'th')).forEach(o=>{
+  const opt = document.createElement('option'); opt.value=o; opt.textContent=o;
+  officeFilterEl.appendChild(opt);
+});
+const usageFilterEl = document.getElementById('usageFilter');
+[...new Set(DATA.map(d=>d.usage_status).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'th')).forEach(o=>{
+  const opt = document.createElement('option'); opt.value=o; opt.textContent=o;
+  usageFilterEl.appendChild(opt);
+});
+
+/* ---------- Table ---------- */
+const tbody = document.getElementById('tableBody');
+const searchBox = document.getElementById('searchBox');
+const reportFilterEl = document.getElementById('reportFilter');
+const condFilterEl = document.getElementById('condFilter');
+const countPill = document.getElementById('countPill');
+let sortKey = 'no', sortDir = 1;
+let activeOfficeFilter = null;
+
+function mapsLink(d){
+  if(d.lat==null) return '<span class="dim">—</span>';
+  return `<a class="maplink" href="https://www.google.com/maps?q=${d.lat},${d.lng}" target="_blank" rel="noopener">${d.lat.toFixed(3)}, ${d.lng.toFixed(3)}</a>`;
+}
+function dash(v){ return v? v : '<span class="dim">—</span>'; }
+
+const activeBar = document.getElementById('activeBar');
+const afChips = document.getElementById('afChips');
+const clearBtn = document.getElementById('clearBtn');
+const REPORT_LABEL = {yes:'ดำเนินการแล้ว', no:'ยังไม่ดำเนินการ'};
+const COND_LABEL = {good:'สมบูรณ์', critical:'ชำรุด / ต้องแก้ไข', neutral:'อื่น ๆ', unknown:'ยังไม่ดำเนินการ'};
+
+/* คืนค่าทุกตัวกรองกลับสู่ค่าเริ่มต้น */
+function resetAll(){
+  searchBox.value=''; officeFilterEl.value=''; reportFilterEl.value='';
+  condFilterEl.value=''; usageFilterEl.value='';
+  activeOfficeFilter=null; renderOfficeList(null);
+  document.querySelectorAll('.kpi').forEach(k=>k.classList.remove('active'));
+  applyFilters();
+}
+
+/* ลบตัวกรองทีละรายการ */
+function removeFilter(type){
+  if(type==='search') searchBox.value='';
+  else if(type==='office'){ officeFilterEl.value=''; activeOfficeFilter=null; renderOfficeList(null); }
+  else if(type==='report'){ reportFilterEl.value=''; }
+  else if(type==='cond'){ condFilterEl.value=''; }
+  else if(type==='usage'){ usageFilterEl.value=''; }
+  document.querySelectorAll('.kpi').forEach(k=>k.classList.remove('active'));
+  applyFilters();
+}
+
+function renderActiveFilters(){
+  const chips = [];
+  const q = searchBox.value.trim();
+  const office = activeOfficeFilter || officeFilterEl.value;
+  if(q) chips.push({type:'search', text:'ค้นหา: “'+q+'”'});
+  if(office) chips.push({type:'office', text:'กฟฟ.: '+office});
+  if(reportFilterEl.value) chips.push({type:'report', text:'สถานะ: '+REPORT_LABEL[reportFilterEl.value]});
+  if(condFilterEl.value) chips.push({type:'cond', text:'สภาพอุปกรณ์: '+COND_LABEL[condFilterEl.value]});
+  if(usageFilterEl.value) chips.push({type:'usage', text:'การใช้งาน: '+usageFilterEl.value});
+
+  activeBar.hidden = chips.length === 0;
+  clearBtn.classList.toggle('armed', chips.length > 0);
+  afChips.innerHTML = chips.map(c=>
+    `<button class="af-chip" type="button" data-type="${c.type}" title="คลิกเพื่อลบตัวกรองนี้">${c.text}<span class="x">✕</span></button>`
+  ).join('');
+}
+
+function applyFilters(){
+  const q = searchBox.value.trim().toLowerCase();
+  const off = officeFilterEl.value;
+  const rep = reportFilterEl.value;
+  const cond = condFilterEl.value;
+  const usage = usageFilterEl.value;
+  renderActiveFilters();
+
+  let rows = DATA.filter(d=>{
+    if(activeOfficeFilter && d.office !== activeOfficeFilter) return false;
+    if(off && d.office !== off) return false;
+    if(rep === 'yes' && !d.reported) return false;
+    if(rep === 'no' && d.reported) return false;
+    if(cond && d._cclass !== cond) return false;
+    if(usage && d.usage_status !== usage) return false;
+    if(q){
+      const hay = [d.office,d.feeder,d.equipment_code,d.location,d.site_id,d.reporter].join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  rows.sort((a,b)=>{
+    let av=a[sortKey], bv=b[sortKey];
+    if(typeof av === 'boolean') av = av?1:0;
+    if(typeof bv === 'boolean') bv = bv?1:0;
+    if(av==null) av = '';
+    if(bv==null) bv = '';
+    if(av<bv) return -1*sortDir;
+    if(av>bv) return 1*sortDir;
+    return a.no-b.no;
+  });
+
+  countPill.textContent = `แสดง ${rows.length} / ${DATA.length} จุด`;
+
+  if(rows.length===0){
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="20">ไม่พบข้อมูลที่ตรงกับตัวกรอง</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(d=>{
+    const cCls = d._cclass;
+    return `<tr class="${d.reported?'reported':''}">
+      <td class="num">${d.no}</td>
+      <td>${d.office}</td>
+      <td class="mono">${dash(d.feeder)}</td>
+      <td class="mono">${dash(d.equipment_code)}</td>
+      <td class="loc">${dash(d.location)}</td>
+      <td class="num">${dash(d.size_kvar)}</td>
+      <td class="mono">${dash(d.switch_on)}</td>
+      <td class="mono">${dash(d.switch_off)}</td>
+      <td class="num">${d.mw!=null? d.mw.toFixed(2):'—'}</td>
+      <td class="num">${d.mvar!=null? d.mvar.toFixed(2):'—'}</td>
+      <td>${dash(d.control_type)}</td>
+      <td class="mono">${dash(d.site_id)}</td>
+      <td>${dash(d.usage_status)}</td>
+      <td><span class="pill ${d.reported?'good':'warn'}"><i></i>${d.reported?'ดำเนินการแล้ว':'ยังไม่ดำเนินการ'}</span></td>
+      <td class="detail">${d.condition? `<span class="pill ${cCls}"><i></i>${d.condition}</span>` : '<span class="dim">—</span>'}</td>
+      <td class="mono">${(d.new_on||d.new_off)? `${d.new_on||'—'} – ${d.new_off||'—'}` : '<span class="dim">—</span>'}</td>
+      <td class="dim">${dash(d.prev_check)}</td>
+      <td>${d.reporter? `${d.reporter}${d.reporter_pos? ` <span class="dim">(${d.reporter_pos}${d.reporter_dept? ' '+d.reporter_dept:''})</span>`:''}` : '<span class="dim">—</span>'}</td>
+      <td class="mono">${dash(d.report_date)}</td>
+      <td>${mapsLink(d)}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('#dataTable thead th[data-key]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(sortKey===key){ sortDir *= -1; } else { sortKey = key; sortDir = 1; }
+    document.querySelectorAll('#dataTable thead th').forEach(x=>{
+      x.classList.remove('sorted');
+      const a = x.querySelector('.arrow'); if(a) a.textContent='↕';
+    });
+    th.classList.add('sorted');
+    th.querySelector('.arrow').textContent = sortDir===1? '↑':'↓';
+    applyFilters();
+  });
+});
+
+searchBox.addEventListener('input', applyFilters);
+officeFilterEl.addEventListener('change', ()=>{ activeOfficeFilter=null; renderOfficeList(null); applyFilters(); });
+reportFilterEl.addEventListener('change', applyFilters);
+condFilterEl.addEventListener('change', applyFilters);
+usageFilterEl.addEventListener('change', applyFilters);
+clearBtn.addEventListener('click', resetAll);
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  resetAll();
+  document.getElementById('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+});
+afChips.addEventListener('click', (e)=>{
+  const chip = e.target.closest('.af-chip');
+  if(chip) removeFilter(chip.dataset.type);
+});
+
+officeListEl.addEventListener('click', (e)=>{
+  const row = e.target.closest('.office-row');
+  if(!row) return;
+  const office = row.dataset.office;
+  activeOfficeFilter = activeOfficeFilter===office? null : office;
+  officeFilterEl.value = activeOfficeFilter || '';
+  renderOfficeList(activeOfficeFilter);
+  applyFilters();
+  document.getElementById('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+kpiRow.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.kpi');
+  if(!btn) return;
+  const f = btn.dataset.filter;
+  const wasActive = btn.classList.contains('active');
+  resetAll();
+  /* คลิกการ์ดเดิมซ้ำ = คืนค่า */
+  if(wasActive) return;
+  if(f==='reported'){ reportFilterEl.value='yes'; btn.classList.add('active'); }
+  else if(f==='pending'){ reportFilterEl.value='no'; btn.classList.add('active'); }
+  else if(f==='broken'){ condFilterEl.value='critical'; btn.classList.add('active'); }
+  applyFilters();
+  if(f!=='all' && f!=='capacity') document.getElementById('dataTable').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ค่าเริ่มต้น: เรียงจุดที่ยังไม่ดำเนินการขึ้นก่อน */
+sortKey='reported'; sortDir=1;
+document.querySelector('#dataTable thead th[data-key="reported"]').classList.add('sorted');
+applyFilters();
+</script>
+</body>
+</html>
